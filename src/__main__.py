@@ -32,7 +32,12 @@ def main():
                   elif choice == 2 :
                            function.add_data_barang(database)
                            function.clear_screen()
+                  elif choice == 3 :
+                           function.update_data(database)
+                           function.clear_screen()
                   elif choice == 5:
+                           print(f'program delete data')
+                  elif choice == 6:
                            print(f'Terimakasih....{username} sampai jumpa kembali\n')
                            break
                   else:
@@ -58,9 +63,10 @@ Menu Utama :
 
 1. Menampilkan Data Barang
 2. Menambahkan Data Barang
-3. Menghapus Data Barang
-4. Cek Out Barang 
-5. Exit
+3. Update Data Barang
+4. Menghapus Data Barang
+5. Cek Out Barang 
+6. Exit
 
 Silahkan Pilih Angka 1 sampai 5 : '''
 
@@ -78,18 +84,18 @@ function.clear_screen()
 database = initialize_db()
 
 while True :
-         print("""
-                           LOGIN APP TOKO BERKAH JAYA
-""")
-         username = function.str_validation('Masukan username : ')
-         password = function.str_validation('Masukan password : ')
+                           print("""
+                                             LOGIN APP TOKO BERKAH JAYA
+                  """)
+                           username = function.str_validation('Masukan username : ')
+                           password = function.str_validation('Masukan password : ')
 
-         if username.lower() == 'topik' and password.lower() == '123':
-                  #menjalankan menu utama
-                  function.clear_screen()
-                  print(f'Berhasil login.... Selamat datang {username}')
-                  main()
-         else:
-                  function.clear_screen()
-                  print('Username dan Password salah !\n')
-                  continue
+                           if username.lower() == 'topik' and password.lower() == '123':
+                                    #menjalankan menu utama
+                                    function.clear_screen()
+                                    print(f'Berhasil login.... Selamat datang {username}')
+                                    main()
+                           else:
+                                    function.clear_screen()
+                                    print('Username dan Password salah !\n')
+                                    continue

@@ -111,6 +111,7 @@ def add_data_barang(database):
          """
          Fungsi untuk menambahkan data barang
          """
+
          #variabel menu add data barang
          read_add_data = '''
                   SELAMAT DATANG DI TOKO BERKAH JAYA
@@ -177,3 +178,78 @@ Silahkan Pilih Angka 1 sampai 2 : '''
                   else:
                            print('Masukan angka 1 sampai 2 !')
                            continue
+
+def update_data(database):
+    """
+    Fungsi untuk menambahkan data barang
+    """
+    # Variabel menu update data
+    update_data_menu = '''
+              SELAMAT DATANG DI TOKO BERKAH JAYA
+
+    Menu Update Data : 
+
+    1. Update Data Barang
+    2. Kembali Menu Utama
+
+    Silahkan Pilih Angka 1 sampai 2 : '''
+
+    while True:
+        choice_update = int_validation(update_data_menu)
+        clear_screen()
+        if choice_update == 1:
+            data_table(data=database.values(),
+                       coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+                       title='\nTABEL BARANG TOKO BERKAH JAYA\n')
+
+            while True:
+                print("""\n                     UPDATE DATA BARANG         \n""")
+                kode_barang = str_validation('Masukan Kode Barang yang Akan di Update : ')
+
+                # Validasi panjang kode barang dan awalan "KB"
+                if len(kode_barang) != 5 or not kode_barang.startswith("KB"):
+                    print("Kode barang harus memiliki panjang 5 karakter dan diawali dengan 'KB'. Contoh : 'KB999'")
+                    continue
+
+                items = list(database.values())
+                item_found = False
+
+                # Periksa apakah kode barang sudah ada atau belum
+                for item in items:
+                    if kode_barang.upper() == item[1]:
+                        data_table(data=[item],
+                                   coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+                                   title='\nTABEL BARANG TOKO BERKAH JAYA\n')
+
+                        print('\nBarang yang Anda ingin update.\n')
+
+                        choice_validasi = str_validation('Apakah ingin melanjutkan update data diatas [y/t] ? : ')
+                        if choice_validasi.lower() == 'y':
+                            while True:
+                                choice_update_column = str_validation('Masukan Nama Kolom yang Akan di Update : ')
+                                if choice_update_column.title() not in ['Nama Barang', 'Harga', 'Stok', 'Keterangan']:
+                                    print('Nama kolom tidak valid.')
+                                    continue
+                                else:
+                                    new_data = str_validation(f'Masukan Data yang baru untuk {choice_update_column}: ')
+                                    validasi_save = str_validation('\nAnda ingin save (y/t) : ')
+                                    if validasi_save.lower() == 'y' :
+                                             item[1 + ['Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'].index(choice_update_column.title())] = new_data
+                                             item_found = True
+                                             break
+                                    break
+                        break
+
+                if not item_found:
+                    print(f'Data "{choice_update_column}" tidak jadi di Update.')
+                    break
+                else:
+                    print(f'Data Kolom "{choice_update_column}" berhasil diperbarui.')
+                    break
+        elif choice_update == 2:
+            break
+        else:
+            print('Masukan angka 1 sampai 2 !')
+
+
+
