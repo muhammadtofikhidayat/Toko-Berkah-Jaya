@@ -7,14 +7,28 @@ def initialize_db():
          """
          Funsi ini berfungsi sebagai inisialisasi data yang diambil dari db
          """
-
-         with open (PATH, 'r') as file:
-                  reader = csv.reader(file, delimiter=';')
-                  database = {}
-                  for row in reader:
-                           kode_barang,nama,harga,stok,keterangan = row
-                           database.update({nama: [kode_barang,nama, int(harga), int(stok), keterangan]})
-
+         database = {}  # Inisialisasi database
+         try:
+                  with open(PATH, 'r') as file:
+                           reader = csv.reader(file, delimiter=';')
+                           # Cek apakah file CSV kosong
+                           if not any(row for row in reader):
+                                    print("Perhatian : File CSV kosong.")
+                                    return database
+                           
+                           # Reset posisi file ke awal
+                           file.seek(0)
+                           
+                           # Baca file CSV dan inisialisasi database
+                           for row in reader:
+                                    kode_barang, nama, harga, stok, keterangan = row
+                                    database.update({nama: [kode_barang, nama, f"Rp.{int(harga)}", f"{int(stok)}pck", keterangan]})
+         except FileNotFoundError:
+                  print("Perhatian : File tidak ditemukan.")
+         except ValueError:
+                  print("Perhatian : Format file CSV tidak sesuai.")
+         except Exception as e:
+                  print("Perhatian : Terjadi kesalahan:", str(e))
          return database
 
 def main():
@@ -39,7 +53,7 @@ def main():
                            function.delete_data(database)
                            function.clear_screen()
                   elif choice == 5:
-                           print(f'program delete data')
+                           print(f'program cheack Out')
                   elif choice == 6:
                            print(f'Terimakasih....{username} sampai jumpa kembali\n')
                            break
@@ -86,19 +100,29 @@ function.clear_screen()
          # Initializing database
 database = initialize_db()
 
+
 while True :
+                           function.clear_screen()
                            print("""
                                              LOGIN APP TOKO BERKAH JAYA
-                  """)
+                  """)     
                            username = function.str_validation('Masukan username : ')
                            password = function.str_validation('Masukan password : ')
 
                            if username.lower() == 'topik' and password.lower() == '123':
                                     #menjalankan menu utama
-                                    function.clear_screen()
                                     print(f'Berhasil login.... Selamat datang {username}')
                                     main()
                            else:
-                                    function.clear_screen()
-                                    print('Username dan Password salah !\n')
+                                    print('\nUsername dan Password yang anda masukan Salah.')
+                                    while True:
+                                             choice = function.str_validation("\nApakah Anda ingin mencoba login lagi? (y/n): ").lower()
+                                             if choice == 'y':
+                                                      break  # Kembali ke loop login utama
+                                             elif choice == 'n':
+                                                      print("\nTerima kasih telah menggunakan aplikasi. Sampai jumpa!")
+                                                      exit()  # Keluar dari program
+                                             else:
+                                                      print("\nMasukan tidak valid. Mohon masukkan 'y' atau 'n'.")
+                                                      continue
                                     continue

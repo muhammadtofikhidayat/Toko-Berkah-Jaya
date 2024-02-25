@@ -53,7 +53,7 @@ def data_table(data, coloums, title):
 
          numbered_data = [[i + 1] + row for i, row in enumerate(data)]
          print(title.center(80))
-         print(tabulate(numbered_data, headers=coloums, tablefmt='grid'))
+         print(tabulate(numbered_data, headers=coloums, tablefmt='fancy_grid'))
 
 def show_menu_data(database):
          #variabel menu read data
@@ -138,41 +138,67 @@ Silahkan Pilih Angka 1 sampai 2 : '''
                                              continue
 
                                     items = list(database.values())
-                                    #meriksa apakah kode barang sudah ada atau belum                 
-                                    for item in items:
-                                             if kode_barang.upper() == item[0]:
-                                                      print('Mohon maaf kode barang yang anda masukan sudah terdaftar.')
-                                                      break
-                                             else:    
-                                                      nama_barang = str_validation('Masukan Nama Barang : ')
-                                                      harga = int_validation('Masukan Harga Barang : ')
-                                                      stok = int_validation('Masukan Stok Barang : ')
-                                                      keterangan = str_validation('Masukan Keterangan : ')
+                                    if not items:
+                                             nama_barang = str_validation('Masukkan Nama Barang: ')
+                                             harga = int_validation('Masukkan Harga Barang: ')
+                                             stok = int_validation('Masukkan Stok Barang: ')
+                                             keterangan = str_validation('Masukkan Keterangan: ')
 
-                                             validasi_save = str_validation('\nAnda ingin save (y/t) : ')
-                                             if validasi_save.lower() == 'y' :
+                                             validasi_save = str_validation('\nAnda ingin save (y/t): ')
+                                             if validasi_save.lower() == 'y':
                                                       database.update({
                                                                f'{nama_barang}': [
-                                                                        kode_barang.upper(),
-                                                                        nama_barang,
-                                                                        harga,
-                                                                        stok,
-                                                                        keterangan]
-                                                                        })
+                                                               kode_barang.upper(),
+                                                               nama_barang,
+                                                               harga,
+                                                               stok,
+                                                               keterangan]
+                                                      })
                                                       data_table(
-                                                      data=database.values(),
-                                                      coloums=['No', 'Kode Barang', 'Nama Barang','Harga', 'Stok' , 'Keterangan'],
-                                                      title='\nTABEL BARANG TOKO BERKAH JAYA\n'         
-                                                      )
+                                                                        data=database.values(),
+                                                                        coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+                                                                        title='\nTABEL BARANG TOKO BERKAH JAYA\n'
+                                                               )
                                                       print('\nData Berhasil Disimpan.')
                                                       break
-                                             else:
-                                                      data_table(
-                                                      data=database.values(),
-                                                      coloums=['No', 'Kode Barang', 'Nama Barang','Harga', 'Stok' , 'Keterangan'],
-                                                      title='\nTABEL BARANG TOKO BERKAH JAYA\n'         
-                                                      )
-                                                      break
+                                    #meriksa apakah kode barang sudah ada atau belum   
+                                    else:              
+                                             for item in items:
+                                                      if kode_barang.upper() == item[0]:
+                                                               print('Mohon maaf kode barang yang anda masukan sudah terdaftar.')
+                                                               break
+                                                      else:    
+                                                               nama_barang = str_validation('Masukan Nama Barang : ')
+                                                               harga = int_validation('Masukan Harga Barang : ')
+                                                               stok = int_validation('Masukan Stok Barang : ')
+                                                               keterangan = str_validation('Masukan Keterangan : ')
+
+                                                      validasi_save = str_validation('\nAnda ingin save (y/t) : ')
+                                                      
+                                                      if validasi_save.lower() == 'y' :
+                                                               database.update({
+                                                                        f'{nama_barang}': [
+                                                                                 kode_barang.upper(),
+                                                                                 nama_barang,
+                                                                                 harga,
+                                                                                 stok,
+                                                                                 keterangan]
+                                                                                 })
+                                                               data_table(
+                                                               data=database.values(),
+                                                               coloums=['No', 'Kode Barang', 'Nama Barang','Harga', 'Stok' , 'Keterangan'],
+                                                               title='\nTABEL BARANG TOKO BERKAH JAYA\n'         
+                                                               )
+                                                               print('\nData Berhasil Disimpan.')
+                                                               break
+                                                      else:
+                                                               data_table(
+                                                               data=database.values(),
+                                                               coloums=['No', 'Kode Barang', 'Nama Barang','Harga', 'Stok' , 'Keterangan'],
+                                                               title='\nTABEL BARANG TOKO BERKAH JAYA\n'         
+                                                               )
+                                                               break
+                                             break
                                     break
                   elif choice_add == 2 :
                            break
@@ -186,14 +212,14 @@ def update_data(database):
     """
     # Variabel menu update data
     update_data_menu = '''
-              SELAMAT DATANG DI TOKO BERKAH JAYA
+                  SELAMAT DATANG DI TOKO BERKAH JAYA
 
-    Menu Update Data : 
+Menu Update Data : 
 
-    1. Update Data Barang
-    2. Kembali Menu Utama
+1. Update Data Barang
+2. Kembali Menu Utama
 
-    Silahkan Pilih Angka 1 sampai 2 : '''
+Silahkan Pilih Angka 1 sampai 2 : '''
 
     while True:
         choice_update = int_validation(update_data_menu)
@@ -206,7 +232,7 @@ def update_data(database):
             while True:
                 print("""\n                     UPDATE DATA BARANG         \n""")
                 kode_barang = str_validation('Masukan Kode Barang yang Akan di Update : ')
-
+                clear_screen()
                 # Validasi panjang kode barang dan awalan "KB"
                 if len(kode_barang) != 5 or not kode_barang.startswith("KB"):
                     print("Kode barang harus memiliki panjang 5 karakter dan diawali dengan 'KB'. Contoh : 'KB999'")
@@ -225,6 +251,7 @@ def update_data(database):
                         print('\nBarang yang Anda ingin update.\n')
 
                         choice_validasi = str_validation('Apakah ingin melanjutkan update data diatas [y/t] ? : ')
+
                         if choice_validasi.lower() == 'y':
                             while True:
                                 choice_update_column = str_validation('Masukan Nama Kolom yang Akan di Update : ')
@@ -233,18 +260,35 @@ def update_data(database):
                                     continue
                                 else:
                                     new_data = str_validation(f'Masukan Data yang baru untuk {choice_update_column}: ')
-                                    validasi_save = str_validation('\nAnda ingin save (y/t) : ')
-                                    if validasi_save.lower() == 'y' :
-                                             item[['Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'].index(choice_update_column.title())] = new_data
-                                             item_found = True
+                                    if choice_update_column.title() == 'Stok':
+                                           a = int(new_data)
+                                           item[3] += a
+                                           break
+                                    else:
+                                             validasi_save = str_validation('\nAnda ingin save (y/t) : ')
+                                             if validasi_save.lower() == 'y' :
+                                                      item[['Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'].index(choice_update_column.title())] = new_data
+                                                      item_found = True
+                                                      break
                                              break
-                                    break
                         break
                 if not item_found:
-                    print(f'Data "{kode_barang}" tidak jadi di Update.')
+                    clear_screen()
+                    data_table(
+                    data=database.values(),
+                    coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+                    title='\nTABEL BARANG TOKO BERKAH JAYA\n'
+                  )
+                    print(f'\nData tidak jadi di Update.')
                     break
                 else:
-                    print(f'Data Kolom "{choice_update_column}" berhasil diperbarui.')
+                    clear_screen()
+                    data_table(
+                    data=database.values(),
+                    coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+                    title='\nTABEL BARANG TOKO BERKAH JAYA\n'
+                  )
+                    print(f'\nData Kolom "{choice_update_column}" berhasil diperbarui.')
                     break
         elif choice_update == 2:
             break
@@ -257,17 +301,18 @@ def delete_data(database):
     Fungsi untuk melakukan delete data barang
     '''
     update_data = '''
-        SELAMAT DATANG DI TOKO BERKAH JAYA
+                  SELAMAT DATANG DI TOKO BERKAH JAYA
 
-        Menu Delete Data : 
+Menu Delete Data : 
 
-        1. Delete Data Barang
-        2. Kembali Menu Utama
+1. Delete Data Barang
+2. Kembali Menu Utama
 
-        Silahkan Pilih Angka 1 sampai 2 : '''
+Silahkan Pilih Angka 1 sampai 2 : '''
 
     while True:
         choice_add = int_validation(update_data)
+        clear_screen()
         if choice_add == 1:
             while True:
                 print("""\nMENGHAPUS DATA BARANG\n""")
@@ -276,10 +321,10 @@ def delete_data(database):
                     coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
                     title='\nTABEL BARANG TOKO BERKAH JAYA\n'
                 )
-                kode_barang = str_validation('Masukan Kode Barang : ')
+                kode_barang = str_validation('\nMasukan Kode Barang : ')
                 # Validasi panjang kode barang dan awalan "KB"
                 if len(kode_barang) != 5 or not kode_barang.startswith("KB"):
-                    print("Kode barang harus memiliki panjang 5 karakter dan diawali dengan 'KB'. Contoh : 'KB999'")
+                    print("\nKode barang harus memiliki panjang 5 karakter dan diawali dengan 'KB'. Contoh : 'KB999'")
                     continue
 
                 item_found = False
@@ -287,6 +332,7 @@ def delete_data(database):
                 for key, value in database.items():
                     if value[0] == kode_barang.upper():
                         item_found = True
+                        clear_screen()
                         data_table(
                             data=[value],
                             coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
@@ -295,11 +341,11 @@ def delete_data(database):
                         validasi_delete = str_validation(f'\nAnda ingin mendelete data dengan kode {kode_barang} (y/t) : ')
                         if validasi_delete.lower() == 'y':
                             del database[key]  # Hapus item dari database
-                            print("Data berhasil dihapus.")
+                            print("\nData berhasil dihapus.")
                         break  # Keluar dari loop pencarian
 
                 if not item_found:
-                    print('Mohon maaf data yang anda cari tidak ada.')
+                    print('\nMohon maaf data yang anda cari tidak ada.')
 
                 lagi = str_validation("\nApakah Anda ingin menghapus data lagi? (y/t) : ")
                 if lagi.lower() != 'y':
@@ -308,6 +354,6 @@ def delete_data(database):
         elif choice_add == 2:
             break  # Keluar dari loop menu delete data
         else:
-            print('Masukan angka 1 sampai 2 !')
+            print('\nMasukan angka 1 sampai 2 !')
 
 
