@@ -12,8 +12,8 @@ def initialize_db():
                   reader = csv.reader(file, delimiter=';')
                   database = {}
                   for row in reader:
-                           no,kode_barang,nama,harga,stok,keterangan = row
-                           database.update({nama: [int(no), kode_barang,nama, int(harga), int(stok), keterangan]})
+                           kode_barang,nama,harga,stok,keterangan = row
+                           database.update({nama: [kode_barang,nama, int(harga), int(stok), keterangan]})
 
          return database
 
@@ -34,6 +34,9 @@ def main():
                            function.clear_screen()
                   elif choice == 3 :
                            function.update_data(database)
+                           function.clear_screen()
+                  elif choice == 4 :
+                           function.delete_data(database)
                            function.clear_screen()
                   elif choice == 5:
                            print(f'program delete data')
@@ -68,7 +71,7 @@ Menu Utama :
 5. Cek Out Barang 
 6. Exit
 
-Silahkan Pilih Angka 1 sampai 5 : '''
+Silahkan Pilih Angka 1 sampai 6 : '''
 
                   if getattr(sys, 'frozen', False):
                            PATH = sys._MEIPASS
