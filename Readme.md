@@ -16,8 +16,8 @@ The directory structure of Tokoh Berkah Jaya project looks like this:
       │   └── db.csv
       ├── requirements.txt
       ├── src
-      │   ├── __main__.py   
-      │   └── function.py
+          ├── __main__.py   
+          └── function.py
       
     
 ## Contribute
