@@ -1,5 +1,15 @@
 ![Header](doc/header.png)
 
+## About
+
+The Berkah Jaya Store app was built with the aim of helping small and medium businesses in managing store item data. We here want to improve existing management by computerizing it to increase profits and speed in managing existing item data. The Berkah Jaya App has five superior features, including:
+
+1. **Read stock**, Berkah Jaya Store displays the entire stock of items available in the database, and you will always get the latest updates from your database.
+2. **Add stock**, Berkah Jaya Store helps you register new items and update existing items, such as quantity or price.
+3. **Delete stock**, Berkah Jaya Store provides high mobility to remove items that you do not need or have expired.
+4. **Update stock**,Toko Berkah Jaya provides high mobility to update item data which will be updated when there is a data error when adding item data.
+5. **Purchase**, Berkah Jaya Store provides an experience for customers to purchase and pay for any item from anywhere at any time.
+
 ## Installation
 
 To get this project, you can clone it by running the following code:
