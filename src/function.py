@@ -149,7 +149,7 @@ Silahkan Pilih Angka 1 sampai 2 : '''
                                                       database.update({
                                                                f'{nama_barang}': [
                                                                kode_barang.upper(),
-                                                               nama_barang,
+                                                               nama_barang.title(),
                                                                harga,
                                                                stok,
                                                                keterangan]
@@ -179,7 +179,7 @@ Silahkan Pilih Angka 1 sampai 2 : '''
                                                                database.update({
                                                                         f'{nama_barang}': [
                                                                                  kode_barang.upper(),
-                                                                                 nama_barang,
+                                                                                 nama_barang.title(),
                                                                                  harga,
                                                                                  stok,
                                                                                  keterangan]
@@ -256,7 +256,7 @@ Silahkan Pilih Angka 1 sampai 2 : '''
                             while True:
                                 choice_update_column = str_validation('Masukan Nama Kolom yang Akan di Update : ')
                                 if choice_update_column.title() not in ['Nama Barang', 'Harga', 'Stok', 'Keterangan']:
-                                    print('Nama kolom tidak valid.')
+                                    print('Nama kolom tidak valid. yang bisa di update hanya [Nama Barang,Harga,Stok,Keterangan]')
                                     continue
                                 else:
                                     new_data = str_validation(f'Masukan Data yang baru untuk {choice_update_column}: ')
@@ -356,4 +356,100 @@ Silahkan Pilih Angka 1 sampai 2 : '''
         else:
             print('\nMasukan angka 1 sampai 2 !')
 
+def pembelian(database):
+    """
+    Fungsi untuk melakukan pembelian berdasarkan kode barang
+    """
+    CART = []
+    reorder = None
+    while reorder != 't':
+        data_table(
+            data=database.values(),
+            coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+            title='\nTABEL BARANG TOKO BERKAH JAYA\n'
+        )
 
+        validasi_kode_barang = str_validation('\nMasukan kode barang yang akan dibeli : ').upper()
+
+        if len(validasi_kode_barang) != 5 or not validasi_kode_barang.startswith("KB"):
+            print("Kode barang harus memiliki panjang 5 karakter dan diawali dengan 'KB'. Contoh : 'KB999'")
+            continue
+        
+        item_found = False
+        for item in database.values():
+            if validasi_kode_barang.upper() == item[0]:
+                item_found = True
+                kode_barang, nama, harga, stok, keterangan = item
+                break
+
+        if not item_found:
+            print('Kode Barang yang anda masukan tidak ada.')
+            continue
+
+        while True:
+            amount = int_validation('Masukan jumlah barang yang dibeli : ')
+
+            if amount > stok:
+                print(f'Jumlah yang dimasukan melebihi batas stok, stok tinggal {stok}')
+                continue
+            else:
+                CART.append([kode_barang, nama, harga, amount, keterangan])
+                break
+
+        data_table(
+            data=CART,
+            coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+            title='\nTABEL CHECK OUT BARANG YANG DIBELI\n'
+        )
+        
+        while True:
+            confirm = str_validation('Apakah ingin Cek out kembali (y/t) : ')
+            if confirm.lower() in ['y', 't']:
+                reorder = confirm.lower()
+                break
+            else:
+                print('silahkan pilih (y/t)')
+                continue
+        
+        # Mengurangi stok dalam database berdasarkan pembelian
+        database[3] -= amount
+        
+        # Menghitung total harga pembelian
+        total_harga = sum([item[2] * item[3] for item in CART])  # item[2] adalah harga per item, item[3] adalah jumlah yang dibeli
+
+        # Menampilkan tabel daftar belanja
+        data_table(
+            data=CART,
+            coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+            title='\nTABEL DAFTAR BELANJA ANDA\n'
+        )
+
+        # Memanggil fungsi pembayaran
+        pembayaran(total_harga)
+
+
+
+def pembayaran(uang):
+    """Fungsi untuk membayar belanjaan
+
+    Args:
+        uang (int): Jumlah uang yang harus dibayar.
+    """
+    print(f'Total yang harus Anda bayar: Rp {uang}')
+
+    while True:
+        try:
+            # Meminta input uang pembayaran
+            bayar = int(input('Silahkan masukkan jumlah uang Anda: Rp '))
+        except ValueError:
+            print('Masukkan angka yang valid!')
+            continue
+    
+        # Validasi pembayaran
+        if bayar < uang:
+            print('Uang yang Anda masukkan kurang!')
+            continue
+        else:
+            kembalian = bayar - uang
+            print(f'Uang kembalian Anda: Rp {kembalian}')
+            break

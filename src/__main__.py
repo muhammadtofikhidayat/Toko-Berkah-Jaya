@@ -22,7 +22,7 @@ def initialize_db():
                            # Baca file CSV dan inisialisasi database
                            for row in reader:
                                     kode_barang, nama, harga, stok, keterangan = row
-                                    database.update({nama: [kode_barang, nama, f"Rp.{int(harga)}", f"{int(stok)}pck", keterangan]})
+                                    database.update({nama: [kode_barang, nama, f"Rp.{int(harga)}", f"{int(stok)} pck", keterangan]})
          except FileNotFoundError:
                   print("Perhatian : File tidak ditemukan.")
          except ValueError:
@@ -53,7 +53,8 @@ def main():
                            function.delete_data(database)
                            function.clear_screen()
                   elif choice == 5:
-                           print(f'program cheack Out')
+                           function.pembelian(database)
+                           function.clear_screen()
                   elif choice == 6:
                            print(f'Terimakasih....{username} sampai jumpa kembali\n')
                            break
