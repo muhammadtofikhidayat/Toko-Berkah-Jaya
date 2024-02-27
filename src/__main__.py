@@ -22,7 +22,7 @@ def initialize_db():
                            # Baca file CSV dan inisialisasi database
                            for row in reader:
                                     kode_barang, nama, harga, stok, keterangan = row
-                                    database.update({nama: [kode_barang, nama, f"Rp.{int(harga)}", f"{int(stok)} pck", keterangan]})
+                                    database.update({nama: [kode_barang, nama,int(harga),int(stok), keterangan]})
          except FileNotFoundError:
                   print("Perhatian : File tidak ditemukan.")
          except ValueError:
@@ -121,7 +121,7 @@ while True :
                                              if choice == 'y':
                                                       break  # Kembali ke loop login utama
                                              elif choice == 'n':
-                                                      print("\nTerima kasih telah menggunakan aplikasi. Sampai jumpa!")
+                                                      print(f"\nTerima kasih telah menggunakan aplikasi. Sampai jumpa!")
                                                       exit()  # Keluar dari program
                                              else:
                                                       print("\nMasukan tidak valid. Mohon masukkan 'y' atau 'n'.")

@@ -23,12 +23,10 @@ def int_validation(prompt):
                            integer = int(input(prompt))
                            if integer < 0:
                                     print("\nPeringatan : masukan anda tidak boleh negatif !")
-                                    clear_screen()
                                     continue
                            else:
                                     return integer
                   except ValueError:
-                                    clear_screen()
                                     print("\nPeringatan : Silakan masukan bilangan bulat !")
 
 
@@ -360,96 +358,117 @@ def pembelian(database):
     """
     Fungsi untuk melakukan pembelian berdasarkan kode barang
     """
-    CART = []
-    reorder = None
-    while reorder != 't':
-        data_table(
-            data=database.values(),
-            coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
-            title='\nTABEL BARANG TOKO BERKAH JAYA\n'
-        )
 
-        validasi_kode_barang = str_validation('\nMasukan kode barang yang akan dibeli : ').upper()
+    '''
+    Fungsi untuk melakukan delete data barang
+    '''
+    pembelian_data = '''
+                    SELAMAT DATANG DI TOKO BERKAH JAYA
 
-        if len(validasi_kode_barang) != 5 or not validasi_kode_barang.startswith("KB"):
-            print("Kode barang harus memiliki panjang 5 karakter dan diawali dengan 'KB'. Contoh : 'KB999'")
-            continue
-        
-        item_found = False
-        for item in database.values():
-            if validasi_kode_barang.upper() == item[0]:
-                item_found = True
-                kode_barang, nama, harga, stok, keterangan = item
-                break
+Menu Pembelian Data : 
 
-        if not item_found:
-            print('Kode Barang yang anda masukan tidak ada.')
-            continue
+1. Pembelian Data Barang
+2. Kembali Menu Utama
 
-        while True:
-            amount = int_validation('Masukan jumlah barang yang dibeli : ')
-
-            if amount > stok:
-                print(f'Jumlah yang dimasukan melebihi batas stok, stok tinggal {stok}')
-                continue
-            else:
-                CART.append([kode_barang, nama, harga, amount, keterangan])
-                break
-
-        data_table(
-            data=CART,
-            coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
-            title='\nTABEL CHECK OUT BARANG YANG DIBELI\n'
-        )
-        
-        while True:
-            confirm = str_validation('Apakah ingin Cek out kembali (y/t) : ')
-            if confirm.lower() in ['y', 't']:
-                reorder = confirm.lower()
-                break
-            else:
-                print('silahkan pilih (y/t)')
-                continue
-        
-        # Mengurangi stok dalam database berdasarkan pembelian
-        database[3] -= amount
-        
-        # Menghitung total harga pembelian
-        total_harga = sum([item[2] * item[3] for item in CART])  # item[2] adalah harga per item, item[3] adalah jumlah yang dibeli
-
-        # Menampilkan tabel daftar belanja
-        data_table(
-            data=CART,
-            coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
-            title='\nTABEL DAFTAR BELANJA ANDA\n'
-        )
-
-        # Memanggil fungsi pembayaran
-        pembayaran(total_harga)
-
-
-
-def pembayaran(uang):
-    """Fungsi untuk membayar belanjaan
-
-    Args:
-        uang (int): Jumlah uang yang harus dibayar.
-    """
-    print(f'Total yang harus Anda bayar: Rp {uang}')
+Silahkan Pilih Angka 1 sampai 2 : '''
 
     while True:
-        try:
-            # Meminta input uang pembayaran
-            bayar = int(input('Silahkan masukkan jumlah uang Anda: Rp '))
-        except ValueError:
-            print('Masukkan angka yang valid!')
-            continue
-    
-        # Validasi pembayaran
-        if bayar < uang:
-            print('Uang yang Anda masukkan kurang!')
-            continue
+        choice_add = int_validation(pembelian_data)
+        clear_screen()
+        if choice_add == 1:
+                CART = []
+                while True:
+                    data_table(
+                        data=database.values(),
+                        coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+                        title='\nTABEL BARANG TOKO BERKAH JAYA\n'
+                    )
+
+                    validasi_kode_barang = str_validation('\nMasukan kode barang yang akan dibeli : ').upper()
+
+                    if len(validasi_kode_barang) != 5 or not validasi_kode_barang.startswith("KB"):
+                        print("Kode barang harus memiliki panjang 5 karakter dan diawali dengan 'KB'. Contoh : 'KB999'")
+                        continue
+                    
+                    item_found = False
+                    for item in database.values():
+                        if validasi_kode_barang.upper() == item[0]:
+                            item_found = True
+                            kode_barang, nama, harga, stok, keterangan = list(item)
+                            break
+
+                    if not item_found:
+                        print('Kode Barang yang anda masukan tidak ada.')
+                        continue
+
+                    while True:
+                        amount = int_validation('Masukan jumlah barang yang dibeli : ')
+                        if amount > int(stok):
+                            print(f'Jumlah yang dimasukan melebihi batas stok, stok tinggal {stok}')
+                            break
+                        else:
+                            item_exists = False
+                            for item in CART:
+                                if item[1] == nama:  # Check if the item exists in CART
+                                    item[3] += amount  # Jika barang sudah ada, tambahkan jumlahnya
+                                    item_exists = True
+                                    break
+                            if not item_exists:
+                                CART.append([kode_barang, nama, harga,amount, keterangan])
+                            break
+                            
+                    data_table(
+                        data=CART,
+                        coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+                        title='\nTABEL CHECK OUT BARANG YANG DIBELI\n'
+                    )
+                    
+                    confirm = str_validation('\nApakah ingin Membeli barang lagi kembali (y/t) : ')
+                    if confirm.lower() == 't':
+                        # Mengurangi stok dalam database berdasarkan pembelian
+                        database[nama][3] -= amount
+                        # Menghitung total harga pembelian
+                        total_harga = sum([item[2] * item[3] for item in CART])  # item[2] adalah harga per item, item[3] adalah jumlah yang dibeli
+                        # Menampilkan tabel daftar belanja
+
+                        data_table(
+                            data=CART,
+                            coloums=['No', 'Kode Barang', 'Nama Barang', 'Harga', 'Stok', 'Keterangan'],
+                            title='\nTABEL DAFTAR BELANJA ANDA\n'
+                        )
+
+                        # Meminta pembayaran
+                        print('\n======================PEMBAYARAN ==========================\n')
+                        print(f'Total yang harus Anda bayar Rp {total_harga}\n')
+                                
+                        while True:
+                            try:
+                                # Meminta input uang pembayaran
+                                bayar = int_validation('\nSilahkan masukkan jumlah uang Anda: ')
+                            except ValueError:
+                                print('\nMasukkan angka yang valid!')
+                                continue
+                                    
+                            # Validasi pembayaran
+                            if bayar < total_harga:
+                                print('\nUang yang Anda masukkan kurang!')
+                            elif bayar == total_harga:
+                                print('\nTerima kasih! Pembayaran telah diterima.')
+                                break  # Exit the loop if payment is exact
+                            else:
+                                kembalian = bayar - total_harga
+                                print(f'\nUang kembalian Anda : Rp{kembalian}')
+                                print('\nTerima kasih! Pembayaran telah diterima.')
+                                break 
+                        break          
+                    elif confirm.lower() == 'y':
+                        # Mengurangi stok dalam database berdasarkan pembelian
+                        database[nama][3] -= amount
+                        continue
+                    else:
+                        print('silahkan pilih (y/t)')
+                        continue
+        elif choice_add == 2:
+            break  # Keluar dari loop menu delete data
         else:
-            kembalian = bayar - uang
-            print(f'Uang kembalian Anda: Rp {kembalian}')
-            break
+            print('\nMasukan angka 1 sampai 2 !')     
