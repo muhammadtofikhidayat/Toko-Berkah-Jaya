@@ -12,8 +12,8 @@ The Berkah Jaya Store app was built with the aim of helping small and medium bus
 
 Note : We use the login feature for the applications we make with the following conditions.
 
-username : topik
-password : 123
+1. username : topik
+2. password : 123
 
 ## Installation
 
