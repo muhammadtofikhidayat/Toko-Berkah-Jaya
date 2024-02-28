@@ -10,6 +10,11 @@ The Berkah Jaya Store app was built with the aim of helping small and medium bus
 4. **Update data barang**,Toko Berkah Jaya provides high mobility to update item data which will be updated when there is a data error when adding item data.
 5. **Pembelian data barang**, Berkah Jaya Store provides an experience for customers to purchase and pay for any item from anywhere at any time.
 
+Note : We use the login feature for the applications we make with the following conditions.
+
+username : topik
+password : 123
+
 ## Installation
 
 To get this project, you can clone it by running the following code:
