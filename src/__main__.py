@@ -112,7 +112,7 @@ while True :
 
                            if username.lower() == 'topik' and password.lower() == '123':
                                     #menjalankan menu utama
-                                    print(f'Berhasil login.... Selamat datang {username}')
+                                    print(f'Berhasil login.... Selamat datang {username.upper()}')
                                     main()
                            else:
                                     print('\nUsername dan Password yang anda masukan Salah.')
